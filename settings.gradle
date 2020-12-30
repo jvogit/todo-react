@@ -1,0 +1,2 @@
+include 'frontend'
+rootProject.name = 'todo-react'
