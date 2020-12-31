@@ -21,8 +21,8 @@ import lombok.Setter;
 public class JwtUserPrincipal implements UserDetails {
 
     private Long id;
+    
     private String username;
-    private String name;
 
     @JsonIgnore
     private String email;
@@ -56,7 +56,7 @@ public class JwtUserPrincipal implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
-        return new JwtUserPrincipal(user.getId(), user.getUsername(), user.getName(), user.getEmail(),
+        return new JwtUserPrincipal(user.getId(), user.getUsername(), user.getEmail(),
                 user.getPassword(), authorities);
     }
 

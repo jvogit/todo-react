@@ -44,10 +44,6 @@ public class User extends DateAudit {
     private Long id;
 
     @NotBlank
-    @Size(max = 40)
-    private String name;
-
-    @NotBlank
     @Size(max = 15)
     private String username;
 
@@ -71,8 +67,7 @@ public class User extends DateAudit {
     )
     private Set<Role> roles;
     
-    public User(String name, String username, String email, String password) {
-        this.name = name;
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
