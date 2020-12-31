@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,7 @@ public class AccountsController {
         return userService.authenticate(payload);
     }
 
-    @PostMapping("/me")
+    @GetMapping("/me")
     public ApiResponse me(@AuthenticationPrincipal JwtUserPrincipal _user) {
         return new ApiSuccess() {
             @JsonProperty
