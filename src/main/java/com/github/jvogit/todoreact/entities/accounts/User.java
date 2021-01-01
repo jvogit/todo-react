@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.jvogit.todoreact.entities.audits.DateAudit;
 import com.github.jvogit.todoreact.entities.roles.Role;
 
@@ -34,6 +34,9 @@ import lombok.Setter;
         @UniqueConstraint(columnNames = {
                 "email"
         })
+})
+@JsonIgnoreProperties(value = {
+        "email", "password"
 })
 @NoArgsConstructor
 @Getter
@@ -51,15 +54,13 @@ public class User extends DateAudit {
     @NotBlank
     @Size(max = 40)
     @Email
-    @JsonIgnore
     private String email;
 
     @NotBlank
     @Size(max = 100)
-    @JsonIgnore
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

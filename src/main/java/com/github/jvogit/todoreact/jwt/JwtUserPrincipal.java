@@ -8,27 +8,24 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.jvogit.todoreact.entities.accounts.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+@JsonIgnoreProperties(value = {
+        "email", "password"
+})
 @AllArgsConstructor
 @Getter
 @Setter
 public class JwtUserPrincipal implements UserDetails {
-
     private Long id;
-    
     private String username;
-
-    @JsonIgnore
     private String email;
-    @JsonIgnore
     private String password;
-
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override

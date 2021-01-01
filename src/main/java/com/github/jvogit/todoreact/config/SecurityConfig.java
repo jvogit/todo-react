@@ -60,6 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()
+            .headers()
+                .frameOptions()
+                .sameOrigin()
+                .and()
             .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)
                 .and()
@@ -82,8 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**")
                     .authenticated()
                 .anyRequest()
-                    .permitAll();
+                    .permitAll()
+                    .and()
+           .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         
-        http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
