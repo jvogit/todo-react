@@ -18,18 +18,14 @@ import com.github.jvogit.todoreact.jwt.JwtUserPrincipal;
 import com.github.jvogit.todoreact.payloads.TodoCreatePayload;
 import com.github.jvogit.todoreact.services.TodoService;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
 @RequestMapping("/api/todos")
-@Slf4j
 public class TodosController {
     @Autowired
     private TodoService todoService;
     
     @PostMapping
     public Todo post(@AuthenticationPrincipal JwtUserPrincipal user, @Valid @RequestBody TodoCreatePayload payload) {
-        log.info("Called");
         return todoService.createTodo(user.getId(), payload);
     }
     
