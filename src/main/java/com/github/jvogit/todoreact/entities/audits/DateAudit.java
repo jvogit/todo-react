@@ -2,6 +2,7 @@ package com.github.jvogit.todoreact.entities.audits;
 
 import java.time.Instant;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Setter
 public abstract class DateAudit {
     @CreatedDate
+    @Column(updatable = false)
     private Instant createdAt;
     
     @LastModifiedDate

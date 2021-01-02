@@ -17,6 +17,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.jvogit.todoreact.entities.accounts.User;
 import com.github.jvogit.todoreact.entities.audits.DateAudit;
@@ -32,6 +34,7 @@ import lombok.Setter;
                 @UniqueConstraint(columnNames = { "user_id", "date" })
         }
 )
+@JsonInclude(Include.NON_NULL)
 @NoArgsConstructor
 @Getter
 @Setter
@@ -50,16 +53,21 @@ public class Todo extends DateAudit {
     @OneToMany(mappedBy = "todo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OrderColumn(name = "todo_index")
     @JsonManagedReference
-    private List<TodoItem> todoItems;
+    private List<TodoItem> items;
     
     public Todo(User user, LocalDate date) {
         this.user = user;
         this.date = date;
-        this.todoItems = new ArrayList<>();
+        this.items = new ArrayList<>();
+    }
+    
+    public void setItems(List<TodoItem> items) {
+        this.items = new ArrayList<>();
+        items.forEach(this::addItem);
     }
     
     public void addItem(TodoItem item) {
-        this.todoItems.add(item);
+        this.items.add(item);
         item.setTodo(this);
     }
     
