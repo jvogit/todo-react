@@ -3,23 +3,22 @@ package com.github.jvogit.todoreact.entities.todos;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.github.jvogit.todoreact.entities.accounts.User;
 import com.github.jvogit.todoreact.entities.audits.DateAudit;
 
@@ -29,35 +28,35 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        name = "todos",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = { "user_id", "date" })
-        }
+        name = "todos"
 )
 @JsonInclude(Include.NON_NULL)
 @NoArgsConstructor
 @Getter
 @Setter
 public class Todo extends DateAudit {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long id;
-    
-    private LocalDate date;
+    @EmbeddedId
+    @JsonUnwrapped
+    private TodoKey id;
     
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @JsonManagedReference
     private User user;
     
-    @OneToMany(mappedBy = "todo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OrderColumn(name = "todo_index")
+    @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "index")
     @JsonManagedReference
     private List<TodoItem> items;
     
     public Todo(User user, LocalDate date) {
         this.user = user;
-        this.date = date;
+        this.id = new TodoKey(user.getId(), date);
+        this.items = new ArrayList<>();
+    }
+    
+    public Todo(Long user_id, LocalDate date) {
+        this.id = new TodoKey(user_id, date);
         this.items = new ArrayList<>();
     }
     
@@ -70,5 +69,24 @@ public class Todo extends DateAudit {
         this.items.add(item);
         item.setTodo(this);
     }
-    
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + Objects.hash(id);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (!(obj instanceof Todo))
+            return false;
+        Todo other = (Todo) obj;
+        return Objects.equals(id, other.id);
+    }
 }

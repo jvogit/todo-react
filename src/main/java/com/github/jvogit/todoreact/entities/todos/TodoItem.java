@@ -1,17 +1,21 @@
 package com.github.jvogit.todoreact.entities.todos;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.jvogit.todoreact.entities.audits.DateAudit;
 
 import lombok.Getter;
@@ -19,10 +23,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "todo_items")
-@JsonIgnoreProperties(
-        value = {"todoIndex"},
-        allowSetters = true
+@Table(
+        name = "todo_items"
 )
 @NoArgsConstructor
 @Getter
@@ -36,15 +38,19 @@ public class TodoItem extends DateAudit {
 
     private Boolean completed;
 
-    @Column(name = "todo_index")
-    private Integer todoIndex;
+    private Integer index;
+    
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
+            @JoinColumn(name = "date", referencedColumnName = "date", insertable = false, updatable = false)})
     @JsonBackReference
     private Todo todo;
-
-    public TodoItem(Long id, String text, Boolean completed) {
-        this.id = id;
+    
+    public TodoItem(String text, Boolean completed) {
         this.text = text;
         this.completed = completed;
     }
@@ -52,7 +58,32 @@ public class TodoItem extends DateAudit {
     @PrePersist
     @PreUpdate
     private void updateIndex() {
-        todoIndex = todo.getItems().indexOf(this);
+        index = todo.getItems().indexOf(this);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result
+                + Objects.hash(completed, id, index, text, userId);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (!(obj instanceof TodoItem))
+            return false;
+        TodoItem other = (TodoItem) obj;
+        return Objects.equals(completed, other.completed)
+                && Objects.equals(id, other.id)
+                && Objects.equals(index, other.index)
+                && Objects.equals(text, other.text)
+                && Objects.equals(userId, other.userId);
     }
 
 }

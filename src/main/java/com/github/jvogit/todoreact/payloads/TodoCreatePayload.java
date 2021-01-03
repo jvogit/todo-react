@@ -1,18 +1,12 @@
 package com.github.jvogit.todoreact.payloads;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Data;
 
 @Data
 public class TodoCreatePayload {
-    private final String date;
-    private final List<TodoCreateItem> items;
-    
-    @Data
-    public static class TodoCreateItem {
-        private Long id;
-        private Boolean completed;
-        private String text;
-    }
+    private final LocalDate date;
+    private final List<TodoCreateItemPayload> items;
 }
