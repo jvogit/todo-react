@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.jvogit.todoreact.entity.todo.Todo;
 import com.github.jvogit.todoreact.entity.todo.TodoItem;
 import com.github.jvogit.todoreact.jwt.JwtUserPrincipal;
-import com.github.jvogit.todoreact.payload.todo.TodoCreatePayload;
 import com.github.jvogit.todoreact.payload.todo.TodoItemCreatePayload;
 import com.github.jvogit.todoreact.payload.todo.TodoItemUpdateIndexPayload;
 import com.github.jvogit.todoreact.payload.todo.TodoItemUpdatePayload;
@@ -32,21 +31,14 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
 
-    @PostMapping
-    public Todo post(@AuthenticationPrincipal JwtUserPrincipal user,
-            @Valid @RequestBody TodoCreatePayload payload) {
-        return todoService.createTodo(user.getId(), payload);
-    }
-
     @GetMapping
     public Todo get(@AuthenticationPrincipal JwtUserPrincipal user,
             @RequestParam String date) {
-        return todoService.getTodo(user.getId(), LocalDate.parse(date))
-                .orElse(new Todo());
+        return todoService.getTodo(user.getId(), LocalDate.parse(date));
     }
 
     @PostMapping("/item")
-    public TodoItem postItem(@AuthenticationPrincipal JwtUserPrincipal user,
+    public TodoItem createItem(@AuthenticationPrincipal JwtUserPrincipal user,
             @Valid @RequestBody TodoItemCreatePayload payload) {
         return todoService.createTodoItem(user.getId(), payload);
     }

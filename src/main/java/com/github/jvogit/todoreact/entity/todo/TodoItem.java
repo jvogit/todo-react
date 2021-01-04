@@ -2,7 +2,6 @@ package com.github.jvogit.todoreact.entity.todo;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -39,14 +38,11 @@ public class TodoItem extends DateAudit {
     private Boolean completed;
 
     private Integer index;
-    
-    @Column(name = "user_id")
-    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
-            @JoinColumn(name = "date", referencedColumnName = "date", insertable = false, updatable = false)})
+            @JoinColumn(name = "user_id"),
+            @JoinColumn(name = "date")})
     @JsonBackReference
     private Todo todo;
     
@@ -66,7 +62,7 @@ public class TodoItem extends DateAudit {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result
-                + Objects.hash(completed, id, index, text, userId);
+                + Objects.hash(completed, id, index, text);
         return result;
     }
 
@@ -82,8 +78,7 @@ public class TodoItem extends DateAudit {
         return Objects.equals(completed, other.completed)
                 && Objects.equals(id, other.id)
                 && Objects.equals(index, other.index)
-                && Objects.equals(text, other.text)
-                && Objects.equals(userId, other.userId);
+                && Objects.equals(text, other.text);
     }
 
 }

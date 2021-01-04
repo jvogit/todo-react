@@ -9,6 +9,6 @@ import com.github.jvogit.todoreact.entity.todo.TodoItem;
 
 @Repository
 public interface TodoItemRepository extends CrudRepository<TodoItem, Long>{
-    Optional<TodoItem> findByUserIdAndId(Long user_id, Long id);
-    long deleteByUserIdAndId(Long user_id, Long id);
+    Optional<TodoItem> findByTodo_User_IdAndId(Long user_id, Long id);
+    long deleteByTodo_User_IdAndId(Long user_id, Long id);
 }
