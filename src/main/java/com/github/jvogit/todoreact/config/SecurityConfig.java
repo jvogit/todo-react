@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.github.jvogit.todoreact.jwt.JwtAuthenticationEntryPoint;
 import com.github.jvogit.todoreact.jwt.JwtAuthenticationFilter;
-import com.github.jvogit.todoreact.services.JwtUserDetailsService;
+import com.github.jvogit.todoreact.service.JwtUserDetailsService;
 
 @Configuration
 @EnableWebSecurity

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.github.jvogit.todoreact.entities.accounts.User;
+import com.github.jvogit.todoreact.entity.account.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

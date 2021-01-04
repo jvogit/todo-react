@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.github.jvogit.todoreact.entities.todos.TodoItem;
+import com.github.jvogit.todoreact.entity.todo.TodoItem;
 
 @Repository
 public interface TodoItemRepository extends CrudRepository<TodoItem, Long>{

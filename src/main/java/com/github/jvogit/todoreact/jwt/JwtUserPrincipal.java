@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.github.jvogit.todoreact.entities.accounts.User;
+import com.github.jvogit.todoreact.entity.account.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
