@@ -41,8 +41,8 @@ public class TodoItem extends DateAudit {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "user_id"),
-            @JoinColumn(name = "date")})
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            @JoinColumn(name = "date", referencedColumnName = "date")})
     @JsonBackReference
     private Todo todo;
     

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.github.jvogit.todoreact.entity.todo.TodoItem;
 
 @Repository
-public interface TodoItemRepository extends CrudRepository<TodoItem, Long>{
+public interface TodoItemRepository extends CrudRepository<TodoItem, Long> {
     Optional<TodoItem> findByTodo_User_IdAndId(Long user_id, Long id);
     long deleteByTodo_User_IdAndId(Long user_id, Long id);
 }

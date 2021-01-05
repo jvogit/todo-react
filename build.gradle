@@ -9,7 +9,6 @@ plugins {
 // Do not set skipNpm to build frontend
 ext {
     def buildType = System.getenv("buildType") ?: "dev"
-    def skipNpm = System.getenv("skipNpm") ?: false
 }
 
 group = 'com.github.jvogit'
