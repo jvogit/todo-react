@@ -57,7 +57,7 @@ public class TodoController {
         return todoService.updateTodoItemIndex(user.getId(), id, payload);
     }
 
-    @DeleteMapping("/item/{id}")
+    @DeleteMapping("/item/{id}/**")
     public ApiSuccess deleteItem(@AuthenticationPrincipal JwtUserPrincipal user,
             @PathVariable Long id) {
         todoService.deleteItem(user.getId(), id);
