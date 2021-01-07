@@ -34,9 +34,8 @@ public class TodoService {
         TodoItem item = new TodoItem(payload.getText(), payload.getCompleted());
         Todo todo = todoRepository.findById(new TodoKey(user_id, payload.getDate())).orElseThrow();
         todo.addItem(item);
-        todo = todoRepository.save(todo);
         
-        return todo.getItems().get(todo.getItems().size() - 1);
+        return todoItemRepository.save(item);
     }
     
     public TodoItem updateTodoItem(Long user_id, Long item_id, TodoItemUpdatePayload payload) {
