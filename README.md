@@ -1,5 +1,5 @@
 # Todo React
-This is the backend repository built using SpringBoot, Spring security, and JPA. This app is yet another basic todo app. This app is deployed on heroku located here: https://jvo-todo-react.herokuapp.com/
+This is the backend repository built using SpringBoot, Spring security, and JPA. This app is yet another basic todo app. This app is deployed on heroku located here: https://jvogit-todo-react.herokuapp.com/
 
 Ideas Explored:
 - REST API
