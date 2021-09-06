@@ -1,41 +1,44 @@
-# Todo React
-This is the backend repository built using SpringBoot, Spring security, and JPA. This app is yet another basic todo app. This app is deployed on heroku located here: https://jvo-todo-react.herokuapp.com/
+# spring-react-nextjs
+Fullstack web application template. Uses: Springboot, React on nextjs,
+GraphQL, Postgres, and JWT authentication. Inspired by [this YouTube video](https://www.youtube.com/watch?v=I6ypD7qv3Z8).
+# docker deployment
+Once again Docker!!! Using docker-compose to run multicontainers.
+- Read each README in `client` and `server`
+- Set environment variables directly in the `docker-compose.yml`
+- Run `docker-compose up --build`
+- Find service at `http://localhost:3000`
+# AWS Deployment
+Deploys application on AWS stack: VPC + Load balancer + ECS on EC2 + RDS on Postgres.
+Charges will incur for AWS resources.
+- Follow instructions in CDK package to deploy stack
+# Heroku + Vercel deployment
+Backend service on heroku with frontend service on Vercel. Also it's free*!
+## Push server to Heroku
+Using Heroku CLI or Heroku website.
 
-Ideas Explored:
-- REST API
-- SpringBoot
-- User authentication flow (JWT)
-- Relational databases
-- (soon) testing
+The following is steps for invoking the `setup` portion of heroku.yml
+- `heroku update beta`
+- `heroku plugins:install @heroku-cli/plugin-manifest` (if not already installed)
+- `heroku create <your-app-name> --manifest`
 
-# Build
-To build, please clone the submodule [frontend](https://github.com/jvogit/todo-react-frontend/) into this repository (or other suitable react frontend implementations).
-```java
-gradlew -PbuildType=prod build
-```
-will automatically install a local version of npm and node in order to build frontend react app and include it into the final jar.
+Othwerise, please follow
+- Set up heroku dyno on website or thru cli
+- Install postgres addon on website or thru cli
+- `heroku stack:set container` (let heroku know this is a Docker contianer stack)
 
-The dev build type will use h2 in memory database, enable h2 console, insert initial data, usually for development purposes.
-
-The prod build type will use Postgresql as the database. Credentials must be provided as environment during runtime (according to application-prod.properties file)
-
-The jar can be run like any other SpringBoot app.
-```java
-java -Dserver.port=$PORT -Dspring.profiles.active=prod -jar todo-react-1.0.0.jar
-```
-This repository includes two SpringBoot profiles: dev (development) and prod (production).
-This corresponds to the build type used to build in gradle.
-
-Additionally this can be deployed to heroku. Modify the gradlew build command used by heroku via GRADLE_TASK or similar as detailed [here](https://devcenter.heroku.com/articles/deploying-gradle-apps-on-heroku#overview).
-The Postgresql add-on is needed.
-```
-heroku config:set GRADLE_TASK="-PbuildType=prod build"
-```
-
-# Features:
-- Basic user authentication (Basic JWT)
-- Keep track of daily todos
-- Edit todos' completion, order, and text
-- Dark mode and light mode!
-- Mobile friendly
-
+Now follow:
+- `heroku git:remote -a <appname>` (to set heroku remote in your local repo)
+- `heroku config:set PGSSLMODE=require` (use SSL for postgres)
+- `heroku config:set ACCESS_TOKEN_SECRET=<secret here>`
+- `heroku config:set REFRESH_TOKEN_SECRET=<secret here>`
+- `heroku config:set JWT_ISSUER=<issuer name>`
+- `heroku config:set CORS_ORIGIN=<value>` (Vercel link, domain name, etc. For now put `http://localhost:3000`)
+- `git push heroku master`
+## Push to vercel
+In client package
+- `yarn vercel` (follow instructions!)
+- Inspect vercel app in `preview` stage. Then set environment variable `NEXT_PUBLIC_BASE_API_URL` with heroku backend url
+- `yarn vercel --prod`
+- Remember to set `CORS_ORIGIN` in Heroku to vercel app url.
+## Pitfalls
+- Take care to not have trailing slash in URLs when settins `CORS` and `NEXT_PUBLIC_BASE_API_URL`
