@@ -49,4 +49,18 @@ public class TodoController {
 
         return todoService.createTodo(user, UUID.randomUUID(), item);
     }
+
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public Todo changeCompleted(@Argument("todo") final Todo todo) {
+        // todo mark as completed
+        return null;
+    }
+
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public Todo changeItem(@Argument("todo") final Todo todo) {
+        // todo change item
+        return null;
+    }
 }

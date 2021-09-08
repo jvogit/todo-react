@@ -59,10 +59,11 @@ public class TodoServiceTest {
     }
 
     @Test
-    void markComplete_happy() {
+    void updateTodo_happy() {
+        final String EXPECTED_NEW_ITEM = EXPECTED_ITEM + "NEW";
         final Todo newExpectedTodo = Todo.builder()
                 .id(EXPECTED_UUID)
-                .item(EXPECTED_ITEM)
+                .item(EXPECTED_NEW_ITEM)
                 .user(expectedUser)
                 .completed(true)
                 .build();
@@ -70,7 +71,7 @@ public class TodoServiceTest {
         when(todoRepository.findById(EXPECTED_UUID)).thenReturn(Optional.of(expectedTodo));
         when(todoRepository.save(expectedTodo)).thenReturn(newExpectedTodo);
 
-        final Todo actual = todoService.setCompleted(EXPECTED_UUID.toString(), true);
+        final Todo actual = todoService.updateTodo(EXPECTED_UUID.toString(), EXPECTED_NEW_ITEM, true);
 
         assertThat(actual, is(newExpectedTodo));
     }

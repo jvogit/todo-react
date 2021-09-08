@@ -3,7 +3,6 @@ package com.github.jvogit.todoreact.controller;
 import com.github.jvogit.todoreact.model.Todo;
 import com.github.jvogit.todoreact.model.User;
 import com.github.jvogit.todoreact.service.TodoService;
-import com.github.jvogit.todoreact.service.TodoServiceTest;
 import com.github.jvogit.todoreact.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +23,9 @@ import static com.github.jvogit.todoreact.util.TestUtil.mockUser;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +44,8 @@ public class TodoControllerTest {
 
     private List<Todo> expectedTodos;
 
+    private Todo expectedFirstTodo;
+
     @BeforeEach
     void setUp() {
         mockAuthenticationPrincipal();
@@ -49,6 +53,8 @@ public class TodoControllerTest {
         expectedUser = mockUser();
 
         expectedTodos = Collections.singletonList(mockTodoFor(expectedUser, UUID.randomUUID(), "This is a test!"));
+
+        expectedFirstTodo = expectedTodos.get(0);
     }
 
     @Test
@@ -65,10 +71,40 @@ public class TodoControllerTest {
         final String expectedItem = "Mock todo";
 
         when(userService.getUser(TEST_ID)).thenReturn(Optional.of(expectedUser));
-        when(todoService.createTodo(expectedUser, any(), expectedItem)).thenReturn(expectedTodos.get(0));
+        when(todoService.createTodo(eq(expectedUser), any(), eq(expectedItem))).thenReturn(expectedFirstTodo);
 
         final Todo todo = todoController.createTodo(expectedItem);
 
-        assertThat(todo, is(expectedTodos.get(0)));
+        assertThat(todo, is(expectedFirstTodo));
+    }
+
+    @Test
+    void changeCompleted_happy() {
+        final Todo newExpected = Todo.builder()
+                .id(expectedFirstTodo.getId())
+                .item(expectedFirstTodo.getItem())
+                .completed(!expectedFirstTodo.isCompleted())
+                .build();
+
+        final Todo actual = todoController.changeCompleted(newExpected);
+
+        verify(todoService, times(1))
+                .updateTodo(eq(newExpected.getId().toString()), eq(newExpected.getItem()), eq(newExpected.isCompleted()));
+        assertThat(actual, is(newExpected));
+    }
+
+    @Test
+    void changeItem_happy() {
+        final Todo newExpected = Todo.builder()
+                .id(expectedFirstTodo.getId())
+                .item(expectedFirstTodo.getItem() + "NEW")
+                .completed(expectedFirstTodo.isCompleted())
+                .build();
+
+        final Todo actual = todoController.changeItem(newExpected);
+
+        verify(todoService, times(1))
+                .updateTodo(eq(newExpected.getId().toString()), eq(newExpected.getItem()), newExpected.isCompleted());
+        assertThat(actual, is(newExpected));
     }
 }

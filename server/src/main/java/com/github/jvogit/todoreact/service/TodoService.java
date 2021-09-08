@@ -35,9 +35,10 @@ public class TodoService {
         return todo;
     }
 
-    public Todo setCompleted(final String id, final boolean completed) {
+    public Todo updateTodo(final String id, final String item, final boolean completed) {
         final Todo todo = todoRepository.findById(UUID.fromString(id)).orElseThrow();
 
+        todo.setItem(item);
         todo.setCompleted(completed);
 
         return todoRepository.save(todo);
