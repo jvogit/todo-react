@@ -3,6 +3,12 @@ type User {
     username: String!
 }
 
+type Todo {
+    id: ID!
+    completed: Boolean!
+    item: String!
+}
+
 input RegisterInput {
     username: String!
     email: String!
@@ -25,11 +31,13 @@ type LoginResponse {
 }
 
 type Query {
-    me: User
+    me: User!
+    todos: [Todo!]!
 }
 
 type Mutation {
     register(input: RegisterInput!): RegisterResponse
     login(input: LoginInput!): LoginResponse
+    createTodo(item: String!): Todo
     logout: Boolean
 }
