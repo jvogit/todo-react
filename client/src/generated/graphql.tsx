@@ -12,7 +12,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** An RFC-3339 compliant DateTime Scalar */
+  DateTime: any;
 };
+
 
 export type LoginInput = {
   usernameOrEmail: Scalars['String'];
@@ -30,6 +33,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   register?: Maybe<RegisterResponse>;
   login?: Maybe<LoginResponse>;
+  createTodo?: Maybe<Todo>;
+  updateTodo?: Maybe<Todo>;
   logout?: Maybe<Scalars['Boolean']>;
 };
 
@@ -43,9 +48,20 @@ export type MutationLoginArgs = {
   input: LoginInput;
 };
 
+
+export type MutationCreateTodoArgs = {
+  item: Scalars['String'];
+};
+
+
+export type MutationUpdateTodoArgs = {
+  todo: TodoInput;
+};
+
 export type Query = {
   __typename?: 'Query';
-  me?: Maybe<User>;
+  me: User;
+  todos: Array<Todo>;
 };
 
 export type RegisterInput = {
@@ -59,11 +75,35 @@ export type RegisterResponse = {
   success: Scalars['Boolean'];
 };
 
+export type Todo = {
+  __typename?: 'Todo';
+  id: Scalars['ID'];
+  completed: Scalars['Boolean'];
+  item: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type TodoInput = {
+  id: Scalars['ID'];
+  completed: Scalars['Boolean'];
+  item: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   username: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
+
+export type CreateTodoMutationVariables = Exact<{
+  item: Scalars['String'];
+}>;
+
+
+export type CreateTodoMutation = { __typename?: 'Mutation', createTodo?: Maybe<{ __typename?: 'Todo', id: string, item: string, completed: boolean, createdAt: any, updatedAt: any }> };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -87,9 +127,51 @@ export type RegisterMutation = { __typename?: 'Mutation', register?: Maybe<{ __t
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string }> };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, username: string } };
+
+export type TodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
+export type TodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', id: string, item: string, completed: boolean, createdAt: any, updatedAt: any }> };
+
+
+export const CreateTodoDocument = gql`
+    mutation createTodo($item: String!) {
+  createTodo(item: $item) {
+    id
+    item
+    completed
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type CreateTodoMutationFn = Apollo.MutationFunction<CreateTodoMutation, CreateTodoMutationVariables>;
+
+/**
+ * __useCreateTodoMutation__
+ *
+ * To run a mutation, you first call `useCreateTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTodoMutation, { data, loading, error }] = useCreateTodoMutation({
+ *   variables: {
+ *      item: // value for 'item'
+ *   },
+ * });
+ */
+export function useCreateTodoMutation(baseOptions?: Apollo.MutationHookOptions<CreateTodoMutation, CreateTodoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTodoMutation, CreateTodoMutationVariables>(CreateTodoDocument, options);
+      }
+export type CreateTodoMutationHookResult = ReturnType<typeof useCreateTodoMutation>;
+export type CreateTodoMutationResult = Apollo.MutationResult<CreateTodoMutation>;
+export type CreateTodoMutationOptions = Apollo.BaseMutationOptions<CreateTodoMutation, CreateTodoMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {
@@ -226,3 +308,41 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const TodosDocument = gql`
+    query Todos {
+  todos {
+    id
+    item
+    completed
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useTodosQuery__
+ *
+ * To run a query within a React component, call `useTodosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTodosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTodosQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTodosQuery(baseOptions?: Apollo.QueryHookOptions<TodosQuery, TodosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TodosQuery, TodosQueryVariables>(TodosDocument, options);
+      }
+export function useTodosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TodosQuery, TodosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TodosQuery, TodosQueryVariables>(TodosDocument, options);
+        }
+export type TodosQueryHookResult = ReturnType<typeof useTodosQuery>;
+export type TodosLazyQueryHookResult = ReturnType<typeof useTodosLazyQuery>;
+export type TodosQueryResult = Apollo.QueryResult<TodosQuery, TodosQueryVariables>;

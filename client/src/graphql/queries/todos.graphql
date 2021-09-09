@@ -1,0 +1,9 @@
+query Todos {
+    todos {
+        id
+        item
+        completed
+        createdAt
+        updatedAt
+    }
+}

@@ -1,0 +1,11 @@
+mutation createTodo($item: String!) {
+    createTodo(
+        item: $item
+    ) {
+        id
+        item
+        completed
+        createdAt
+        updatedAt
+    }
+}
