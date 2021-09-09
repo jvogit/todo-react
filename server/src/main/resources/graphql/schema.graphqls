@@ -1,9 +1,21 @@
+scalar DateTime
+
 type User {
     id: ID!
     username: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
 }
 
 type Todo {
+    id: ID!
+    completed: Boolean!
+    item: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+input TodoInput {
     id: ID!
     completed: Boolean!
     item: String!
@@ -39,5 +51,6 @@ type Mutation {
     register(input: RegisterInput!): RegisterResponse
     login(input: LoginInput!): LoginResponse
     createTodo(item: String!): Todo
+    updateTodo(todo: TodoInput!): Todo
     logout: Boolean
 }

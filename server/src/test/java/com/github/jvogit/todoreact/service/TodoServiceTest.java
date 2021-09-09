@@ -7,8 +7,6 @@ import com.github.jvogit.todoreact.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,10 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.jvogit.todoreact.util.TestUtil.TEST_ID;
 import static com.github.jvogit.todoreact.util.TestUtil.mockTodoFor;
 import static com.github.jvogit.todoreact.util.TestUtil.mockUser;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -71,8 +71,17 @@ public class TodoServiceTest {
         when(todoRepository.findById(EXPECTED_UUID)).thenReturn(Optional.of(expectedTodo));
         when(todoRepository.save(expectedTodo)).thenReturn(newExpectedTodo);
 
-        final Todo actual = todoService.updateTodo(EXPECTED_UUID.toString(), EXPECTED_NEW_ITEM, true);
+        final Todo actual = todoService.updateTodo(EXPECTED_UUID, TEST_ID, EXPECTED_NEW_ITEM, true);
 
         assertThat(actual, is(newExpectedTodo));
+    }
+
+    @Test
+    void updateTodo_unauthorized() {
+        final String EXPECTED_NEW_ITEM = EXPECTED_ITEM + "NEW";
+
+        when(todoRepository.findById(EXPECTED_UUID)).thenReturn(Optional.of(expectedTodo));
+
+        assertThrows(RuntimeException.class, () -> todoService.updateTodo(EXPECTED_UUID, UUID.randomUUID(), EXPECTED_NEW_ITEM, true));
     }
 }

@@ -52,15 +52,9 @@ public class TodoController {
 
     @MutationMapping
     @PreAuthorize("isAuthenticated()")
-    public Todo changeCompleted(@Argument("todo") final Todo todo) {
-        // todo mark as completed
-        return null;
-    }
+    public Todo updateTodo(@Argument("todo") final Todo todo) {
+        final JwtUserDetails userDetails = getUserDetails();
 
-    @MutationMapping
-    @PreAuthorize("isAuthenticated()")
-    public Todo changeItem(@Argument("todo") final Todo todo) {
-        // todo change item
-        return null;
+        return todoService.updateTodo(todo.getId(), userDetails.getId(), todo.getItem(), todo.isCompleted());
     }
 }

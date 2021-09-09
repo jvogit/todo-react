@@ -1,13 +1,14 @@
 package com.github.jvogit.todoreact.model;
 
+import reactor.util.annotation.NonNull;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.UUID;
@@ -20,19 +21,24 @@ public class Todo extends DateAudit {
     private UUID id;
 
     @Column
+    @NotNull
     private boolean completed;
 
     @Column
     @Size(max = 255)
     private String item;
 
+    @Column
+    private Integer pos;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    public Todo(final UUID id, final boolean completed, final String item, final User user) {
+    public Todo(final UUID id, final boolean completed, final String item, final Integer pos, final User user) {
         this.id = id;
         this.completed = completed;
         this.item = item;
+        this.pos = pos;
         this.user = user;
     }
 
@@ -63,6 +69,14 @@ public class Todo extends DateAudit {
         this.item = item;
     }
 
+    public Integer getPos() {
+        return pos;
+    }
+
+    public void setPos(Integer pos) {
+        this.pos = pos;
+    }
+
     public User getUser() {
         return user;
     }
@@ -79,6 +93,7 @@ public class Todo extends DateAudit {
                 ", id=" + id +
                 ", completed=" + completed +
                 ", item='" + item + '\'' +
+                ", pos=" + pos +
                 ", user=" + user +
                 '}';
     }
@@ -89,12 +104,12 @@ public class Todo extends DateAudit {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Todo todo = (Todo) o;
-        return isCompleted() == todo.isCompleted() && Objects.equals(getId(), todo.getId()) && Objects.equals(getItem(), todo.getItem()) && Objects.equals(getUser(), todo.getUser());
+        return isCompleted() == todo.isCompleted() && Objects.equals(getId(), todo.getId()) && Objects.equals(getItem(), todo.getItem()) && Objects.equals(getPos(), todo.getPos()) && Objects.equals(getUser(), todo.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId(), isCompleted(), getItem(), getUser());
+        return Objects.hash(super.hashCode(), getId(), isCompleted(), getItem(), getPos(), getUser());
     }
 
     public static Todo.Builder builder() {
@@ -106,6 +121,7 @@ public class Todo extends DateAudit {
         private UUID id;
         private boolean completed;
         private String item;
+        private Integer pos;
         private User user;
 
         public Builder id(final UUID id) {
@@ -123,13 +139,18 @@ public class Todo extends DateAudit {
             return this;
         }
 
+        public Builder pos(final Integer pos) {
+            this.pos = pos;
+            return this;
+        }
+
         public Builder user(final User user) {
             this.user = user;
             return this;
         }
 
         public Todo build() {
-            return new Todo(id, completed, item, user);
+            return new Todo(id, completed, item, pos, user);
         }
     }
 }

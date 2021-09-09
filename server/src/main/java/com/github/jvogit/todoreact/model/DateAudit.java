@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -14,24 +14,24 @@ import java.util.Objects;
 public abstract class DateAudit {
 
     @CreatedDate
-    protected Instant createdAt;
+    protected OffsetDateTime createdAt;
 
     @LastModifiedDate
-    protected Instant updatedAt;
+    protected OffsetDateTime updatedAt;
 
-    public Instant getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

@@ -45,7 +45,7 @@ public class User extends DateAudit {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @OrderColumn
+    @OrderColumn(name = "pos")
     private List<Todo> todos = new ArrayList<>(0);
 
     public User(

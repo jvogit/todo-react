@@ -79,32 +79,38 @@ public class TodoControllerTest {
     }
 
     @Test
-    void changeCompleted_happy() {
+    void updateTodo_completed_happy() {
         final Todo newExpected = Todo.builder()
                 .id(expectedFirstTodo.getId())
                 .item(expectedFirstTodo.getItem())
                 .completed(!expectedFirstTodo.isCompleted())
                 .build();
 
-        final Todo actual = todoController.changeCompleted(newExpected);
+        when(todoService.updateTodo(newExpected.getId(), TEST_ID, newExpected.getItem(), newExpected.isCompleted()))
+                .thenReturn(newExpected);
+
+        final Todo actual = todoController.updateTodo(newExpected);
 
         verify(todoService, times(1))
-                .updateTodo(eq(newExpected.getId().toString()), eq(newExpected.getItem()), eq(newExpected.isCompleted()));
+                .updateTodo(eq(newExpected.getId()), eq(TEST_ID), eq(newExpected.getItem()), eq(newExpected.isCompleted()));
         assertThat(actual, is(newExpected));
     }
 
     @Test
-    void changeItem_happy() {
+    void updateTodo_item_happy() {
         final Todo newExpected = Todo.builder()
                 .id(expectedFirstTodo.getId())
                 .item(expectedFirstTodo.getItem() + "NEW")
                 .completed(expectedFirstTodo.isCompleted())
                 .build();
 
-        final Todo actual = todoController.changeItem(newExpected);
+        when(todoService.updateTodo(newExpected.getId(), TEST_ID, newExpected.getItem(), newExpected.isCompleted()))
+                .thenReturn(newExpected);
+
+        final Todo actual = todoController.updateTodo(newExpected);
 
         verify(todoService, times(1))
-                .updateTodo(eq(newExpected.getId().toString()), eq(newExpected.getItem()), newExpected.isCompleted());
+                .updateTodo(eq(newExpected.getId()), eq(TEST_ID), eq(newExpected.getItem()), eq(newExpected.isCompleted()));
         assertThat(actual, is(newExpected));
     }
 }
