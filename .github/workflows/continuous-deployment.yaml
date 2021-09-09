@@ -17,9 +17,9 @@ jobs:
           distribution: 'temurin'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: Build with Gradle
+      - name: Unit Tests
         working-directory: ./server
-        run: ./gradlew build
+        run: ./gradlew test
   deploy:
     name: Deploy
     needs: [test]
