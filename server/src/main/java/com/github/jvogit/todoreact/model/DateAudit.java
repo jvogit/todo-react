@@ -8,7 +8,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -44,18 +43,5 @@ public abstract class DateAudit {
                 "createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DateAudit dateAudit = (DateAudit) o;
-        return Objects.equals(getCreatedAt(), dateAudit.getCreatedAt()) && Objects.equals(getUpdatedAt(), dateAudit.getUpdatedAt());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getCreatedAt(), getUpdatedAt());
     }
 }

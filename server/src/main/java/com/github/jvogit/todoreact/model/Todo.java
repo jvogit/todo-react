@@ -102,14 +102,13 @@ public class Todo extends DateAudit {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Todo todo = (Todo) o;
         return isCompleted() == todo.isCompleted() && Objects.equals(getId(), todo.getId()) && Objects.equals(getItem(), todo.getItem()) && Objects.equals(getPos(), todo.getPos()) && Objects.equals(getUser(), todo.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId(), isCompleted(), getItem(), getPos(), getUser());
+        return Objects.hash(getId(), isCompleted(), getItem(), getPos(), getUser());
     }
 
     public static Todo.Builder builder() {
