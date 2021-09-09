@@ -5,13 +5,8 @@ import com.github.jvogit.todoreact.model.User;
 import com.github.jvogit.todoreact.repository.TodoRepository;
 import com.github.jvogit.todoreact.repository.UserRepository;
 import com.github.jvogit.todoreact.util.AuthUtil;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
-import javax.persistence.Table;
-import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Component

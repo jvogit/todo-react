@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -14,10 +15,12 @@ import java.util.Objects;
 public abstract class DateAudit {
 
     @CreatedDate
-    protected OffsetDateTime createdAt;
+    @NotNull
+    protected OffsetDateTime createdAt = OffsetDateTime.now();
 
     @LastModifiedDate
-    protected OffsetDateTime updatedAt;
+    @NotNull
+    protected OffsetDateTime updatedAt = OffsetDateTime.now();
 
     public OffsetDateTime getCreatedAt() {
         return createdAt;
