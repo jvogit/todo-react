@@ -1,4 +1,4 @@
-# spring-react-nextjs
+# todo-react-v2
 Fullstack web application template. Uses: Springboot, React on nextjs,
 GraphQL, Postgres, and JWT authentication. Inspired by [this YouTube video](https://www.youtube.com/watch?v=I6ypD7qv3Z8).
 # docker deployment

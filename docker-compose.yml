@@ -14,5 +14,5 @@ services:
       - PGSSLMODE=disable
       - ACCESS_TOKEN_SECRET=superdupernotsecret
       - REFRESH_TOKEN_SECRET=superdupernotsecret
-      - JWT_ISSUER=spring-react-nextjs
+      - JWT_ISSUER=todo-react-v2
       - CORS_ORIGIN=http://localhost:3000

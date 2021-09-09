@@ -14,10 +14,10 @@ const Home: React.FC<{}> = () => {
       maxW="3xl"
     >
       <Heading>
-        spring-react-nextjs
+        todo-react-v2
       </Heading>
       <Text>
-        spring-react-nextjs is my template for a fullstack web app using Springboot,
+        todo-react-v2 is my template for a fullstack web app using Springboot,
         Postgres, GraphQL, and Nextjs/React. Inspired by this{" "}
         <Link color="teal.500" href="https://www.youtube.com/watch?v=I6ypD7qv3Z8" isExternal>Youtube Video</Link>.
         Check out GitHub repo below!
@@ -26,7 +26,7 @@ const Home: React.FC<{}> = () => {
         direction={'column'}
         align={'center'}
       >
-        <Button as="a" href="https://github.com/jvogit/spring-react-nextjs" leftIcon={<FaGithub />}>
+        <Button as="a" href="https://github.com/jvogit/todo-react" leftIcon={<FaGithub />}>
           GitHub
         </Button>
       </Stack>

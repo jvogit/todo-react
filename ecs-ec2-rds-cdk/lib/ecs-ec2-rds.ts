@@ -26,7 +26,7 @@ export class EcsEc2Rds extends cdk.Stack {
 
     const postgresRDS = new PostgresRDSStack(this, 'PostgresRds', {
       vpc: vpc,
-      instanceIdentifier: "spring-react-nextjs",
+      instanceIdentifier: "todo-react-v2",
       databaseName: "springReactNextJs"
     });
 

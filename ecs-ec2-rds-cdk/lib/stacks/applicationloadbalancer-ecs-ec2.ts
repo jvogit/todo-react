@@ -43,21 +43,21 @@ export class ApplicationLoadBalancerEcsEc2Stack extends cdk.Stack {
       taskDefinition: this.taskDefinition,
     });
 
-    this.createWebContainer(scope, "spring-react-nextjs-frontend", props.vpc, {
-      containerName: "spring-react-nextjs-frontend",
+    this.createWebContainer(scope, "todo-react-v2-frontend", props.vpc, {
+      containerName: "todo-react-v2-frontend",
       image: ecs.ContainerImage.fromAsset(props.frontendImage.directory, props.frontendImage.props),
       memoryLimitMiB: 256,
       environment: {
         "BASE_API_URL": `http://${this.loadBalancer.loadBalancerDnsName}:8080`
       },
-      logging: new AwsLogDriver({ streamPrefix: "spring-react-nextjs-frontend" }),
+      logging: new AwsLogDriver({ streamPrefix: "todo-react-v2-frontend" }),
       portMappings: [
         { containerPort: 3000, hostPort: 80, protocol: ecs.Protocol.TCP }
       ]
     });
 
-    this.createWebContainer(scope, "spring-react-nextjs-backend", props.vpc, {
-      containerName: "spring-react-nextjs-backend",
+    this.createWebContainer(scope, "todo-react-v2-backend", props.vpc, {
+      containerName: "todo-react-v2-backend",
       image: ecs.ContainerImage.fromAsset(props.backendImage.directory, props.backendImage.props),
       memoryLimitMiB: 256,
       environment: {
@@ -65,7 +65,7 @@ export class ApplicationLoadBalancerEcsEc2Stack extends cdk.Stack {
         "CORS_ORIGIN": `http://${this.loadBalancer.loadBalancerDnsName}`,
         ...props.envVars
       },
-      logging: new AwsLogDriver({ streamPrefix: "spring-react-nextjs-backend" }),
+      logging: new AwsLogDriver({ streamPrefix: "todo-react-v2-backend" }),
       portMappings: [
         { containerPort: 8080, hostPort: 8080, protocol: ecs.Protocol.TCP }
       ]

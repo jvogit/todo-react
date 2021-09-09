@@ -7,5 +7,5 @@ required properties
 - `./gradlew bootRun`
 - `./gradlew bootRun --args="--spring.profiles.active=development"` for `development` profile
 # notes
-- Building image `docker build --tag spring-react-nextjs-backend .`
-- Running container `docker run -p 8080:8080 spring-react-nextjs-backend`
+- Building image `docker build --tag todo-react-v2-backend .`
+- Running container `docker run -p 8080:8080 todo-react-v2-backend`

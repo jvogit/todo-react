@@ -24,7 +24,7 @@ const Header: React.FC<FlexProps> = (props) => {
     >
       <Flex align="center" mr={5}>
         <Heading size="lg" letterSpacing={"tighter"}>
-          <Link href="/">spring-react-nextjs</Link>
+          <Link href="/">todo-react-v2</Link>
         </Heading>
       </Flex>
 
