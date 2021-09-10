@@ -62,7 +62,7 @@ public class UserService {
     }
 
     public Optional<User> getUserByUsernameOrEmail(final String usernameOrEmail) {
-        return userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+        return userRepository.findByUsernameIgnoreCaseOrEmailIgnoreCase(usernameOrEmail, usernameOrEmail);
     }
 
     public Optional<JwtUserDetails> getUserDetailsFromToken(final String token) {
