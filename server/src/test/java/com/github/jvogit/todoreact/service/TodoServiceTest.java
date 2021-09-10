@@ -11,12 +11,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_ID;
 import static com.github.jvogit.todoreact.util.TestUtil.mockTodoFor;
-import static com.github.jvogit.todoreact.util.TestUtil.mockUser;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,7 +46,7 @@ public class TodoServiceTest {
 
     @BeforeEach
     void setUp() {
-        expectedUser = mockUser();
+        expectedUser = User.builder().id(TEST_ID).build();
         expectedTodo = mockTodoFor(expectedUser, EXPECTED_UUID, EXPECTED_ITEM);
     }
 
@@ -68,20 +68,30 @@ public class TodoServiceTest {
                 .completed(true)
                 .build();
 
-        when(todoRepository.findById(EXPECTED_UUID)).thenReturn(Optional.of(expectedTodo));
+        when(todoRepository.findByIdAndUser(EXPECTED_UUID, expectedUser)).thenReturn(Optional.of(expectedTodo));
         when(todoRepository.save(expectedTodo)).thenReturn(newExpectedTodo);
 
-        final Todo actual = todoService.updateTodo(EXPECTED_UUID, TEST_ID, EXPECTED_NEW_ITEM, true);
+        final Todo actual = todoService.updateTodo(EXPECTED_UUID, expectedUser, EXPECTED_NEW_ITEM, true);
 
         assertThat(actual, is(newExpectedTodo));
     }
 
     @Test
-    void updateTodo_unauthorized() {
-        final String EXPECTED_NEW_ITEM = EXPECTED_ITEM + "NEW";
+    void updateTodo_notFound() {
+        assertThrows(NoSuchElementException.class, () -> todoService.updateTodo(UUID.randomUUID(), expectedUser, "test", true));
+    }
 
-        when(todoRepository.findById(EXPECTED_UUID)).thenReturn(Optional.of(expectedTodo));
+    @Test
+    void deleteTodo_happy() {
+        when(todoRepository.deleteByIdAndUser(EXPECTED_UUID, expectedUser)).thenReturn(Optional.of(expectedTodo));
 
-        assertThrows(RuntimeException.class, () -> todoService.updateTodo(EXPECTED_UUID, UUID.randomUUID(), EXPECTED_NEW_ITEM, true));
+        final Todo actual = todoService.deleteTodo(EXPECTED_UUID, expectedUser);
+
+        assertThat(actual, is(expectedTodo));
+    }
+
+    @Test
+    void deleteTodo_notFound() {
+        assertThrows(NoSuchElementException.class, () -> todoService.deleteTodo(UUID.randomUUID(), expectedUser));
     }
 }

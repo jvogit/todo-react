@@ -4,7 +4,6 @@ import com.github.jvogit.todoreact.model.Todo;
 import com.github.jvogit.todoreact.model.User;
 import com.github.jvogit.todoreact.repository.TodoRepository;
 import com.github.jvogit.todoreact.repository.UserRepository;
-import com.github.jvogit.todoreact.util.AuthUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -34,14 +33,17 @@ public class TodoService {
         return todo;
     }
 
-    public Todo updateTodo(final UUID id, final UUID userId, final String item, final boolean completed) {
-        final Todo todo = todoRepository.findById(id)
-                .filter(o -> AuthUtil.authorize(o, userId))
-                .orElseThrow();
-
+    public Todo updateTodo(final UUID id, final User user, final String item, final boolean completed) {
+        final Todo todo = todoRepository.findByIdAndUser(id, user).orElseThrow();
         todo.setItem(item);
         todo.setCompleted(completed);
 
         return todoRepository.save(todo);
+    }
+
+    public Todo deleteTodo(final UUID id, final User user) {
+        final Todo todo = todoRepository.deleteByIdAndUser(id, user).orElseThrow();
+
+        return todo;
     }
 }

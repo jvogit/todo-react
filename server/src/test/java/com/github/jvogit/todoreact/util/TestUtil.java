@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.UUID;
 
 import static org.mockito.Mockito.mock;

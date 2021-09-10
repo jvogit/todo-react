@@ -1,7 +1,5 @@
 package com.github.jvogit.todoreact.model;
 
-import reactor.util.annotation.NonNull;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

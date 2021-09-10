@@ -66,6 +66,10 @@ public class JwtUserDetails implements UserDetails {
         return id;
     }
 
+    public User toUser() {
+        return User.builder().id(id).build();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

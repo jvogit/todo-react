@@ -125,12 +125,12 @@ public class User extends DateAudit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getTokenVersion() == user.getTokenVersion() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getTodos(), user.getTodos());
+        return getTokenVersion() == user.getTokenVersion() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getEmail(), getPassword(), getTokenVersion(), getTodos());
+        return Objects.hash(getId(), getUsername(), getEmail(), getPassword(), getTokenVersion());
     }
 
     public static User.Builder builder() {
