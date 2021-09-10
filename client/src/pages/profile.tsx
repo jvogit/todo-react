@@ -26,7 +26,7 @@ const Profile: React.FC<{}> = () => {
 
   return (
     <Center
-      py={{ base: 20, md: 36 }}
+      py={{ base: 10 }}
       maxW={{ base: "sm", md: "xl" }}
       width="full"
     >

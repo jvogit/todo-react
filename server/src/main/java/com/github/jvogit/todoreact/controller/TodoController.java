@@ -3,6 +3,7 @@ package com.github.jvogit.todoreact.controller;
 import com.github.jvogit.todoreact.model.JwtUserDetails;
 import com.github.jvogit.todoreact.model.Todo;
 import com.github.jvogit.todoreact.model.User;
+import com.github.jvogit.todoreact.model.input.TodoInput;
 import com.github.jvogit.todoreact.repository.UserRepository;
 import com.github.jvogit.todoreact.service.TodoService;
 import com.github.jvogit.todoreact.service.UserService;
@@ -52,9 +53,9 @@ public class TodoController {
 
     @MutationMapping
     @PreAuthorize("isAuthenticated()")
-    public Todo updateTodo(@Argument("todo") final Todo todo) {
+    public Todo updateTodo(@Argument("todo") final TodoInput todo) {
         final JwtUserDetails userDetails = getUserDetails();
 
-        return todoService.updateTodo(todo.getId(), userDetails.getId(), todo.getItem(), todo.isCompleted());
+        return todoService.updateTodo(todo.id(), userDetails.getId(), todo.item(), todo.completed());
     }
 }

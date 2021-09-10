@@ -1,7 +1,9 @@
-import { Avatar, Button, Container, Heading, VStack } from '@chakra-ui/react';
+import { EditIcon } from '@chakra-ui/icons';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, Button, Center, Checkbox, Container, Heading, HStack, IconButton, List, ListIcon, ListItem, Spinner, VStack } from '@chakra-ui/react';
 import { update } from 'lodash';
 import * as React from 'react';
 import { TodosDocument, TodosQuery, useCreateTodoMutation, User, useTodosQuery } from '../../generated/graphql';
+import Todos from '../todos/Todos';
 
 interface Props {
   user: Pick<User, "id" | "username">
@@ -9,15 +11,12 @@ interface Props {
 
 const ProfileCard: React.FC<Props> = ({ user }) => {
 
-  const { data, loading } = useTodosQuery();
-  const [ createTodo ] = useCreateTodoMutation({ notifyOnNetworkStatusChange: true });
-
   return (
     <VStack
       w="full"
       rounded={"xl"}
       spacing={6}
-      boxShadow={'2xl'}
+      borderWidth={2}
       p={6}
     >
       <Avatar
@@ -28,42 +27,34 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
         {user.username}
       </Heading>
       <Container maxW="100%">
-        <pre id="json" style={{ position: "relative", overflowX: "auto" }}>
-          {
-            JSON.stringify(user, null, 2)
-          }
-        </pre>
-      </Container>
-      <Container maxW="100%">
-        <pre id="json" style={{ position: "relative", overflowX: "auto" }}>
-          {
-            !loading ? JSON.stringify(data.todos, null, 2) : "Loading..."
-          }
-        </pre>
-      </Container>
-      <Container maxW="100%">
-        <Button
-          w="100%"
-          onClick={() => {
-            createTodo({
-              variables: {
-                item: "Fill this out!"
-              },
-              update: (store, { data }) => {
-                const prevData = store.readQuery<TodosQuery>({
-                  query: TodosDocument
-                });
-
-                store.writeQuery<TodosQuery>({
-                  query: TodosDocument,
-                  data: { todos: [...prevData.todos, data.createTodo] }
-                });
-              }
-            })
-          }}
-        >
-          Create Todo
-        </Button>
+        <Accordion allowToggle allowMultiple defaultIndex={1}>
+          <AccordionItem>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                User info
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel>
+              <pre id="json" style={{ position: "relative", overflowX: "auto" }}>
+                {
+                  JSON.stringify(user, null, 2)
+                }
+              </pre>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                Todos
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel>
+              <Todos />
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </Container>
     </VStack>
   );

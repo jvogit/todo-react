@@ -1,0 +1,11 @@
+mutation updateTodo($todo: TodoInput!) {
+    updateTodo(
+        todo: $todo
+    ) {
+      id
+      item
+      completed
+      createdAt
+      updatedAt
+    }
+}

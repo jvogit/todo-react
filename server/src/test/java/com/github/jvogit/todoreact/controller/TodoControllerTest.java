@@ -2,6 +2,7 @@ package com.github.jvogit.todoreact.controller;
 
 import com.github.jvogit.todoreact.model.Todo;
 import com.github.jvogit.todoreact.model.User;
+import com.github.jvogit.todoreact.model.input.TodoInput;
 import com.github.jvogit.todoreact.service.TodoService;
 import com.github.jvogit.todoreact.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,11 +86,13 @@ public class TodoControllerTest {
                 .item(expectedFirstTodo.getItem())
                 .completed(!expectedFirstTodo.isCompleted())
                 .build();
+        final TodoInput newExpectedInput = new TodoInput(
+                newExpected.getId(), newExpected.isCompleted(), newExpected.getItem());
 
         when(todoService.updateTodo(newExpected.getId(), TEST_ID, newExpected.getItem(), newExpected.isCompleted()))
                 .thenReturn(newExpected);
 
-        final Todo actual = todoController.updateTodo(newExpected);
+        final Todo actual = todoController.updateTodo(newExpectedInput);
 
         verify(todoService, times(1))
                 .updateTodo(eq(newExpected.getId()), eq(TEST_ID), eq(newExpected.getItem()), eq(newExpected.isCompleted()));
@@ -103,11 +106,13 @@ public class TodoControllerTest {
                 .item(expectedFirstTodo.getItem() + "NEW")
                 .completed(expectedFirstTodo.isCompleted())
                 .build();
+        final TodoInput newExpectedInput = new TodoInput(
+                newExpected.getId(), newExpected.isCompleted(), newExpected.getItem());
 
         when(todoService.updateTodo(newExpected.getId(), TEST_ID, newExpected.getItem(), newExpected.isCompleted()))
                 .thenReturn(newExpected);
 
-        final Todo actual = todoController.updateTodo(newExpected);
+        final Todo actual = todoController.updateTodo(newExpectedInput);
 
         verify(todoService, times(1))
                 .updateTodo(eq(newExpected.getId()), eq(TEST_ID), eq(newExpected.getItem()), eq(newExpected.isCompleted()));
