@@ -15,8 +15,6 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
     <VStack
       w="full"
       rounded={"xl"}
-      spacing={6}
-      borderWidth={2}
       p={6}
     >
       <Avatar

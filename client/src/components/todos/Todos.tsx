@@ -3,10 +3,10 @@ import { Center, Checkbox, HStack, IconButton, List, ListItem, Spinner, VStack }
 import * as React from 'react';
 import { useCreateTodoMutation, useTodosQuery, useUpdateTodoMutation } from '../../generated/graphql';
 import CreateTodo from './CreateTodo';
+import EditTodo from './EditTodo';
 
 const Todos: React.FC<{}> = () => {
   const { data, loading } = useTodosQuery();
-  const [createTodo] = useCreateTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
 
   return (
@@ -15,13 +15,14 @@ const Todos: React.FC<{}> = () => {
         loading || !data ? <Center padding={10}><Spinner /></Center> : (
           <List spacing={5} pb={5} width="100%">
             {
-              data.todos.map(todo => (
-                <ListItem key={todo.id}>
+              data.todos.map(todo => {
+                return (<ListItem key={todo.id}>
                   <HStack justifyContent="space-between">
                     <Checkbox
                       spacing={"2rem"}
                       width="100%"
                       isChecked={todo.completed}
+                      textDecoration={todo.completed ? 'line-through' : 'none'}
                       onChange={(e) => {
                         updateTodo({
                           variables: {
@@ -33,15 +34,13 @@ const Todos: React.FC<{}> = () => {
                           }
                         })
                       }}
-                    >{todo.item}</Checkbox>
-                    <IconButton
-                      variant="ghost"
-                      aria-label="Edit"
-                      icon={<EditIcon />}
-                    />
+                    >
+                      {todo.item}
+                    </Checkbox>
+                    <EditTodo {...todo} />
                   </HStack>
-                </ListItem>
-              ))
+                </ListItem>);
+              })
             }
           </List>
         )
