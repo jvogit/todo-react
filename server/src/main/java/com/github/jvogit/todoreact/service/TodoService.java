@@ -6,6 +6,7 @@ import com.github.jvogit.todoreact.repository.TodoRepository;
 import com.github.jvogit.todoreact.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -19,7 +20,12 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    public Todo createTodo(final User user, final UUID id, final String item) {
+    public List<Todo> todos(final UUID userId) {
+        return userRepository.findById(userId).orElseThrow().getTodos();
+    }
+
+    public Todo createTodo(final UUID id, final UUID userId, final String item) {
+        final User user = userRepository.findById(userId).orElseThrow();
         final Todo todo = Todo.builder()
                 .id(id)
                 .item(item)
@@ -33,7 +39,8 @@ public class TodoService {
         return todo;
     }
 
-    public Todo updateTodo(final UUID id, final User user, final String item, final boolean completed) {
+    public Todo updateTodo(final UUID id, final UUID userId, final String item, final boolean completed) {
+        final User user = User.builder().id(userId).build();
         final Todo todo = todoRepository.findByIdAndUser(id, user).orElseThrow();
         todo.setItem(item);
         todo.setCompleted(completed);
@@ -41,9 +48,15 @@ public class TodoService {
         return todoRepository.save(todo);
     }
 
-    public Todo deleteTodo(final UUID id, final User user) {
-        final Todo todo = todoRepository.deleteByIdAndUser(id, user).orElseThrow();
+    public void deleteTodo(final UUID id, final UUID userId) {
+        final User user = userRepository.findById(userId).orElseThrow();
+        final Todo todo = user.getTodos().stream()
+                .filter(o -> id.equals(o.getId()))
+                .findAny()
+                .orElseThrow();
 
-        return todo;
+        user.getTodos().remove(todo);
+
+        userRepository.save(user);
     }
 }

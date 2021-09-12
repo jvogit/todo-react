@@ -18,7 +18,7 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.jvogit.todoreact.util.TestUtil.TEST_ID;
+import static com.github.jvogit.todoreact.util.TestUtil.TEST_USERID;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_ISSUER;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_REFRESH_TOKEN_ALGO;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_REFRESH_TOKEN_VERIFIER;
@@ -59,7 +59,7 @@ public class RefreshTokenServiceTest {
         final User expectedUser = mockUser();
         final String mockRefreshToken = generateMockRefreshToken();
 
-        when(userRepository.findById(TEST_ID)).thenReturn(Optional.of(expectedUser));
+        when(userRepository.findById(TEST_USERID)).thenReturn(Optional.of(expectedUser));
 
         final Optional<User> actual = refreshTokenService.verify(mockRefreshToken);
 
@@ -74,7 +74,7 @@ public class RefreshTokenServiceTest {
 
         final String mockRefreshToken = generateMockRefreshToken();
 
-        when(userRepository.findById(TEST_ID)).thenReturn(Optional.of(expectedUser));
+        when(userRepository.findById(TEST_USERID)).thenReturn(Optional.of(expectedUser));
 
         final Optional<User> actual = refreshTokenService.verify(mockRefreshToken);
 

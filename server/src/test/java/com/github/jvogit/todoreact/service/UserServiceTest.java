@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_ACCESS_TOKEN_ALGO;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_ACCESS_TOKEN_VERIFIER;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_EMAIL;
-import static com.github.jvogit.todoreact.util.TestUtil.TEST_ID;
+import static com.github.jvogit.todoreact.util.TestUtil.TEST_USERID;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_ISSUER;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_PASSWORD;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_USERNAME;
@@ -85,9 +85,9 @@ public class UserServiceTest {
     void getUser_happy() {
         final User mockUser = mockUser();
 
-        when(userRepository.findById(TEST_ID)).thenReturn(Optional.of(mockUser));
+        when(userRepository.findById(TEST_USERID)).thenReturn(Optional.of(mockUser));
 
-        final Optional<User> actual = userService.getUser(TEST_ID);
+        final Optional<User> actual = userService.getUser(TEST_USERID);
 
         assertThat(actual, is(Optional.of(mockUser)));
     }
@@ -107,7 +107,7 @@ public class UserServiceTest {
     @Test
     void getUserDetailsFromToken_happy() {
         final JwtUserDetails expectedUserDetails = JwtUserDetails.builder()
-                .id(TEST_ID)
+                .id(TEST_USERID)
                 .username(TEST_USERNAME)
                 .build();
 

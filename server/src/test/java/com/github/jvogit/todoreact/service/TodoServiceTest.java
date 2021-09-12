@@ -11,13 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.github.jvogit.todoreact.util.TestUtil.TEST_ID;
+import static com.github.jvogit.todoreact.util.TestUtil.TEST_USERID;
 import static com.github.jvogit.todoreact.util.TestUtil.mockTodoFor;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
@@ -46,13 +48,25 @@ public class TodoServiceTest {
 
     @BeforeEach
     void setUp() {
-        expectedUser = User.builder().id(TEST_ID).build();
+        expectedUser = User.builder().id(TEST_USERID).build();
         expectedTodo = mockTodoFor(expectedUser, EXPECTED_UUID, EXPECTED_ITEM);
     }
 
     @Test
+    void todos_happy() {
+
+        when(userRepository.findById(TEST_USERID)).thenReturn(Optional.of(expectedUser));
+
+        final List<Todo> actual = todoService.todos(TEST_USERID);
+
+        assertThat(actual, contains(expectedTodo));
+    }
+
+    @Test
     void createTodo_happy() {
-        final Todo actual = todoService.createTodo(expectedUser, EXPECTED_UUID, EXPECTED_ITEM);
+        when(userRepository.findById(TEST_USERID)).thenReturn(Optional.of(expectedUser));
+
+        final Todo actual = todoService.createTodo(EXPECTED_UUID, TEST_USERID, EXPECTED_ITEM);
 
         verify(userRepository, times(1)).save(expectedUser);
         assertThat(actual, is(expectedTodo));
@@ -71,27 +85,30 @@ public class TodoServiceTest {
         when(todoRepository.findByIdAndUser(EXPECTED_UUID, expectedUser)).thenReturn(Optional.of(expectedTodo));
         when(todoRepository.save(expectedTodo)).thenReturn(newExpectedTodo);
 
-        final Todo actual = todoService.updateTodo(EXPECTED_UUID, expectedUser, EXPECTED_NEW_ITEM, true);
+        final Todo actual = todoService.updateTodo(EXPECTED_UUID, TEST_USERID, EXPECTED_NEW_ITEM, true);
 
         assertThat(actual, is(newExpectedTodo));
     }
 
     @Test
     void updateTodo_notFound() {
-        assertThrows(NoSuchElementException.class, () -> todoService.updateTodo(UUID.randomUUID(), expectedUser, "test", true));
+        assertThrows(NoSuchElementException.class, () -> todoService.updateTodo(UUID.randomUUID(), TEST_USERID, "test", true));
     }
 
     @Test
     void deleteTodo_happy() {
-        when(todoRepository.deleteByIdAndUser(EXPECTED_UUID, expectedUser)).thenReturn(Optional.of(expectedTodo));
+        when(userRepository.findById(TEST_USERID)).thenReturn(Optional.of(expectedUser));
 
-        final Todo actual = todoService.deleteTodo(EXPECTED_UUID, expectedUser);
+        todoService.deleteTodo(EXPECTED_UUID, TEST_USERID);
 
-        assertThat(actual, is(expectedTodo));
+        verify(userRepository, times(1)).save(expectedUser);
+        assertThat(expectedUser.getTodos().size(), is(0));
     }
 
     @Test
     void deleteTodo_notFound() {
-        assertThrows(NoSuchElementException.class, () -> todoService.deleteTodo(UUID.randomUUID(), expectedUser));
+        when(userRepository.findById(TEST_USERID)).thenReturn(Optional.of(expectedUser));
+
+        assertThrows(NoSuchElementException.class, () -> todoService.deleteTodo(UUID.randomUUID(), TEST_USERID));
     }
 }

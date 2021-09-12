@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 public final class TestUtil {
 
-    public static final UUID TEST_ID = UUID.randomUUID();
+    public static final UUID TEST_USERID = UUID.randomUUID();
     public static final String TEST_USERNAME = "testUsername";
     public static final String TEST_EMAIL = "testEmail";
     public static final String TEST_PASSWORD = "testPassword";
@@ -40,7 +40,7 @@ public final class TestUtil {
 
     public static User mockUser() {
         final User mockUser = User.builder()
-                .id(TEST_ID)
+                .id(TEST_USERID)
                 .username(TEST_USERNAME)
                 .password(TEST_PASSWORD)
                 .email(TEST_EMAIL)
@@ -71,7 +71,7 @@ public final class TestUtil {
                 .withIssuer(TEST_ISSUER)
                 .withIssuedAt(Date.from(now))
                 .withExpiresAt(Date.from(expiresAt))
-                .withSubject(TEST_ID.toString())
+                .withSubject(TEST_USERID.toString())
                 .withClaim("tokenVersion", TEST_TOKEN_VERSION)
                 .sign(TEST_REFRESH_TOKEN_ALGO);
     }
@@ -85,14 +85,14 @@ public final class TestUtil {
                 .withIssuedAt(Date.from(now))
                 .withExpiresAt(Date.from(expires))
                 .withSubject(TEST_USERNAME)
-                .withClaim("userId", TEST_ID.toString())
+                .withClaim("userId", TEST_USERID.toString())
                 .sign(TEST_ACCESS_TOKEN_ALGO);
     }
 
     public static void mockAuthenticationPrincipal() {
         final JwtUserDetails mockJwtUserDetails = JwtUserDetails.builder()
                 .username(TEST_USERNAME)
-                .id(TEST_ID)
+                .id(TEST_USERID)
                 .build();
         final Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(mockJwtUserDetails);

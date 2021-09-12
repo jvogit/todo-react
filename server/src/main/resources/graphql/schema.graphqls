@@ -52,5 +52,6 @@ type Mutation {
     login(input: LoginInput!): LoginResponse
     createTodo(item: String!): Todo
     updateTodo(todo: TodoInput!): Todo
+    deleteTodo(id: ID!): Boolean
     logout: Boolean
 }

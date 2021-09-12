@@ -23,7 +23,7 @@ import org.springframework.security.core.Authentication;
 import java.util.Optional;
 
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_EMAIL;
-import static com.github.jvogit.todoreact.util.TestUtil.TEST_ID;
+import static com.github.jvogit.todoreact.util.TestUtil.TEST_USERID;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_PASSWORD;
 import static com.github.jvogit.todoreact.util.TestUtil.TEST_USERNAME;
 import static com.github.jvogit.todoreact.util.TestUtil.generateMockAccessToken;
@@ -60,7 +60,7 @@ public class UserControllerTest {
         mockAuthenticationPrincipal();
         final User mockUser = mockUser();
 
-        when(userService.getUser(TEST_ID)).thenReturn(Optional.of(mockUser));
+        when(userService.getUser(TEST_USERID)).thenReturn(Optional.of(mockUser));
 
         final User actualUser = userController.me();
 
@@ -81,7 +81,7 @@ public class UserControllerTest {
     void login_happy(final String usernameOrEmail) {
         final User mockUser = mockUser();
         final JwtUserDetails jwtUserDetails = JwtUserDetails.builder()
-                .id(TEST_ID)
+                .id(TEST_USERID)
                 .username(TEST_USERNAME)
                 .password(TEST_PASSWORD)
                 .build();
