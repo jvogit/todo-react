@@ -1,8 +1,6 @@
-import { EditIcon } from '@chakra-ui/icons';
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, Button, Center, Checkbox, Container, Heading, HStack, IconButton, List, ListIcon, ListItem, Spinner, VStack } from '@chakra-ui/react';
-import { update } from 'lodash';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Avatar, Box, Container, Heading, VStack } from '@chakra-ui/react';
 import * as React from 'react';
-import { TodosDocument, TodosQuery, useCreateTodoMutation, User, useTodosQuery } from '../../generated/graphql';
+import { User } from '../../generated/graphql';
 import Todos from '../todos/Todos';
 
 interface Props {

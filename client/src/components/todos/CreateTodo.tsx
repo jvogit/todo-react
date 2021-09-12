@@ -1,9 +1,8 @@
-import { EditIcon } from '@chakra-ui/icons';
-import { Button, Center, Checkbox, FormControl, FormErrorMessage, FormLabel, HStack, IconButton, Input, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, VStack } from '@chakra-ui/react';
-import { Formik, Form, Field, useFormik } from 'formik';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import { useFormik } from 'formik';
 import * as React from 'react';
 import * as Yup from 'yup';
-import { TodosDocument, TodosQuery, useCreateTodoMutation, useTodosQuery, useUpdateTodoMutation } from '../../generated/graphql';
+import { TodosDocument, TodosQuery, useCreateTodoMutation } from '../../generated/graphql';
 
 const CreateTodo: React.FC<{}> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

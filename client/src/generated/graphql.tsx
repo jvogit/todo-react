@@ -35,6 +35,7 @@ export type Mutation = {
   login?: Maybe<LoginResponse>;
   createTodo?: Maybe<Todo>;
   updateTodo?: Maybe<Todo>;
+  deleteTodo?: Maybe<Scalars['Boolean']>;
   logout?: Maybe<Scalars['Boolean']>;
 };
 
@@ -56,6 +57,11 @@ export type MutationCreateTodoArgs = {
 
 export type MutationUpdateTodoArgs = {
   todo: TodoInput;
+};
+
+
+export type MutationDeleteTodoArgs = {
+  id: Scalars['ID'];
 };
 
 export type Query = {
@@ -104,6 +110,13 @@ export type CreateTodoMutationVariables = Exact<{
 
 
 export type CreateTodoMutation = { __typename?: 'Mutation', createTodo?: Maybe<{ __typename?: 'Todo', id: string, item: string, completed: boolean, createdAt: any, updatedAt: any }> };
+
+export type DeleteTodoMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteTodoMutation = { __typename?: 'Mutation', deleteTodo?: Maybe<boolean> };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -179,6 +192,37 @@ export function useCreateTodoMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateTodoMutationHookResult = ReturnType<typeof useCreateTodoMutation>;
 export type CreateTodoMutationResult = Apollo.MutationResult<CreateTodoMutation>;
 export type CreateTodoMutationOptions = Apollo.BaseMutationOptions<CreateTodoMutation, CreateTodoMutationVariables>;
+export const DeleteTodoDocument = gql`
+    mutation deleteTodo($id: ID!) {
+  deleteTodo(id: $id)
+}
+    `;
+export type DeleteTodoMutationFn = Apollo.MutationFunction<DeleteTodoMutation, DeleteTodoMutationVariables>;
+
+/**
+ * __useDeleteTodoMutation__
+ *
+ * To run a mutation, you first call `useDeleteTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTodoMutation, { data, loading, error }] = useDeleteTodoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTodoMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTodoMutation, DeleteTodoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTodoMutation, DeleteTodoMutationVariables>(DeleteTodoDocument, options);
+      }
+export type DeleteTodoMutationHookResult = ReturnType<typeof useDeleteTodoMutation>;
+export type DeleteTodoMutationResult = Apollo.MutationResult<DeleteTodoMutation>;
+export type DeleteTodoMutationOptions = Apollo.BaseMutationOptions<DeleteTodoMutation, DeleteTodoMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {

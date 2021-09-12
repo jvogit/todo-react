@@ -1,9 +1,9 @@
-import { EditIcon } from '@chakra-ui/icons';
-import { Center, Checkbox, HStack, IconButton, List, ListItem, Spinner, VStack } from '@chakra-ui/react';
+import { Center, Checkbox, HStack, List, ListItem, Spinner, VStack } from '@chakra-ui/react';
 import * as React from 'react';
-import { useCreateTodoMutation, useTodosQuery, useUpdateTodoMutation } from '../../generated/graphql';
+import { useTodosQuery, useUpdateTodoMutation } from '../../generated/graphql';
 import CreateTodo from './CreateTodo';
 import EditTodo from './EditTodo';
+import Todo from './Todo';
 
 const Todos: React.FC<{}> = () => {
   const { data, loading } = useTodosQuery();
@@ -18,26 +18,7 @@ const Todos: React.FC<{}> = () => {
               data.todos.map(todo => {
                 return (<ListItem key={todo.id}>
                   <HStack justifyContent="space-between">
-                    <Checkbox
-                      spacing={"2rem"}
-                      width="100%"
-                      isChecked={todo.completed}
-                      textDecoration={todo.completed ? 'line-through' : 'none'}
-                      onChange={(e) => {
-                        updateTodo({
-                          variables: {
-                            todo: {
-                              id: todo.id,
-                              completed: e.target.checked,
-                              item: todo.item
-                            }
-                          }
-                        })
-                      }}
-                    >
-                      {todo.item}
-                    </Checkbox>
-                    <EditTodo {...todo} />
+                    <Todo todo={todo} />
                   </HStack>
                 </ListItem>);
               })

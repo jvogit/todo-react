@@ -1,35 +1,34 @@
 import { EditIcon } from '@chakra-ui/icons';
-import { Button, ButtonGroup, Center, Checkbox, FormControl, FormErrorMessage, FormLabel, HStack, IconButton, Input, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, VStack } from '@chakra-ui/react';
-import { Formik, Form, Field, useFormik } from 'formik';
+import { Button, ButtonGroup, FormControl, FormErrorMessage, FormLabel, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import { useFormik } from 'formik';
 import * as React from 'react';
 import * as Yup from 'yup';
-import { TodosDocument, TodosQuery, useCreateTodoMutation, useTodosQuery, useUpdateTodoMutation } from '../../generated/graphql';
+import { Todo, useDeleteTodoMutation, useUpdateTodoMutation } from '../../generated/graphql';
 
 interface EditTodoProps {
-  id: string;
-  completed: boolean;
-  item: string;
+  todo: Todo;
 }
 
-const EditTodo: React.FC<EditTodoProps> = (props) => {
+const EditTodo: React.FC<EditTodoProps> = ({ todo }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [updateTodo] = useUpdateTodoMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
   const validationSchema = Yup.object({
     item: Yup.string().required('Required'),
   });
   const formik = useFormik({
     initialValues: {
-      item: props.item,
+      item: todo.item,
     },
     validationSchema,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
       updateTodo({
         variables: {
           todo: {
-            id: props.id,
-            item: values.item,
-            completed: props.completed,
+            id: todo.id,
+            completed: todo.completed,
+            item: values.item
           }
         }
       });
@@ -63,6 +62,17 @@ const EditTodo: React.FC<EditTodoProps> = (props) => {
               <ButtonGroup>
                 <Button
                   isDisabled={formik.isSubmitting}
+                  onClick={() => {
+                    deleteTodo({
+                      variables: {
+                        id: todo.id
+                      },
+                      update: (cache, { data }) => {
+                        cache.evict({ id: `Todo:${todo.id}` });
+                      }
+                    });
+                    onClose();
+                  }}
                 >
                   Delete
                 </Button>
